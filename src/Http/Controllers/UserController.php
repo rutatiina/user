@@ -3,7 +3,7 @@
 namespace Rutatiina\User\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Models\UserDetails;
+use Rutatiina\User\Models\UserDetails;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;

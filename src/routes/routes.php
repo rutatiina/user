@@ -1,14 +1,16 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
 use Rutatiina\User\Http\Controllers\GroupController;
 use Rutatiina\User\Http\Controllers\GroupUserController;
 use Rutatiina\User\Http\Controllers\PermissionController;
 use Rutatiina\User\Http\Controllers\ProfileController;
 use Rutatiina\User\Http\Controllers\RoleController;
+use Rutatiina\User\Http\Controllers\UserController;
 
 Route::group(['middleware' => ['web', 'auth']], function() {
 
-    Route::resource('users', 'UserController');
+    Route::resource('users', UserController::class);
 
 });
 

@@ -87,7 +87,7 @@ class User extends Authenticatable
 
     public function details()
     {
-        return $this->hasOne('App\Models\UserDetails', 'user_id', 'id');
+        return $this->hasOne('Rutatiina\User\Models\UserDetails', 'user_id', 'id');
     }
 
 }
