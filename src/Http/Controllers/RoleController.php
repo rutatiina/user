@@ -23,7 +23,7 @@ class RoleController extends Controller
     {
         //load the vue version of the app
         if (!FacadesRequest::wantsJson()) {
-            return view('l-limitless-bs4.layout_2-ltr-default.appVue');
+            return view('ui.limitless::layout_2-ltr-default.appVue');
         }
 
         $perPage = ($request->per_page) ? $request->per_page : 20;
@@ -42,7 +42,7 @@ class RoleController extends Controller
     {
         //load the vue version of the app
         if (!FacadesRequest::wantsJson()) {
-            return view('l-limitless-bs4.layout_2-ltr-default.appVue');
+            return view('ui.limitless::layout_2-ltr-default.appVue');
         }
     }
 
@@ -83,7 +83,7 @@ class RoleController extends Controller
     public function assign(Request $request)
     {
         if ($request->method() == 'GET') {
-            return view('l-limitless-bs4.layout_2-ltr-default.appVue');
+            return view('ui.limitless::layout_2-ltr-default.appVue');
         }
 
         $validator = Validator::make($request->all(), [

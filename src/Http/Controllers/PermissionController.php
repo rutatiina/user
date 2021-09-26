@@ -185,7 +185,7 @@ class PermissionController extends Controller
     {
         //load the vue version of the app
         if (!FacadesRequest::wantsJson()) {
-            return view('l-limitless-bs4.layout_2-ltr-default.appVue');
+            return view('ui.limitless::layout_2-ltr-default.appVue');
         }
 
         //$perPage = ($request->per_page) ? $request->per_page : 20;
@@ -255,7 +255,7 @@ class PermissionController extends Controller
 
     public function assign()
     {
-        return view('l-limitless-bs4.layout_2-ltr-default.appVue');
+        return view('ui.limitless::layout_2-ltr-default.appVue');
     }
 
     public function count()
