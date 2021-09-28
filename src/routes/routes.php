@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Rutatiina\User\Http\Controllers\GroupController;
 use Rutatiina\User\Http\Controllers\GroupUserController;
@@ -8,15 +9,15 @@ use Rutatiina\User\Http\Controllers\ProfileController;
 use Rutatiina\User\Http\Controllers\RoleController;
 use Rutatiina\User\Http\Controllers\UserController;
 
+
+Route::group(['middleware' => ['web']], function() {
+    Auth::routes();
+});
 Route::group(['middleware' => ['web', 'auth']], function() {
-
     Route::resource('users', UserController::class);
-
 });
 
-
 Route::group(['middleware' => ['web', 'auth', 'tenant']], function() {
-
     //Route::get('permissions/setup', 'PermissionController@setup');
     Route::get('profile/activity', [ProfileController::class, 'activity'])->name('profile.activity');
     Route::get('profile/roles', [ProfileController::class, 'roles'])->name('profile.roles');
@@ -34,7 +35,6 @@ Route::group(['middleware' => ['web', 'auth', 'tenant']], function() {
         'groups' => GroupController::class,
         'group-users' => GroupUserController::class,
     ]);
-
 });
 
 /*
