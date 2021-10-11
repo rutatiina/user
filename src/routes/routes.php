@@ -9,10 +9,17 @@ use Rutatiina\User\Http\Controllers\ProfileController;
 use Rutatiina\User\Http\Controllers\RoleController;
 use Rutatiina\User\Http\Controllers\UserController;
 
+use Rutatiina\User\Http\Controllers\Auth\LoginController;
+use Rutatiina\User\Http\Controllers\Auth\RegisterController;
+use Rutatiina\User\Http\Controllers\Auth\ForgotPasswordController;
+use Rutatiina\User\Http\Controllers\Auth\ResetPasswordController;
+use Rutatiina\User\Http\Controllers\Auth\VerificationController;
 
-Route::group(['middleware' => ['web']], function() {
-    Auth::routes();
-});
+//this commented code bellow is to be removed
+//Route::group(['middleware' => ['web']], function() {
+//    Auth::routes();
+//});
+
 Route::group(['middleware' => ['web', 'auth']], function() {
     Route::resource('users', UserController::class);
 });
@@ -37,26 +44,28 @@ Route::group(['middleware' => ['web', 'auth', 'tenant']], function() {
     ]);
 });
 
-/*
+//*
 // Authentication Routes...
-Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
-Route::post('login', 'Auth\LoginController@login');
-Route::post('logout', 'Auth\LoginController@logout')->name('logout');
+Route::group(['middleware' => ['web']], function() {
+    Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
+    Route::post('login', [LoginController::class, 'login']);
+    Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 
-// Registration Routes...
-Route::get('register', 'Auth\RegisterController@showRegistrationForm')->name('register');
-Route::post('register', 'Auth\RegisterController@register');
+    // Registration Routes...
+    Route::get('register', [RegisterController::class, 'showRegistrationForm'])->name('register');
+    Route::post('register', [RegisterController::class, 'register']);
 
-// Password Reset Routes...
-Route::get('password/reset', 'Auth\ForgotPasswordController@showLinkRequestForm')->name('password.request');
-Route::post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');
-Route::get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.reset');
-Route::post('password/reset', 'Auth\ResetPasswordController@reset');
+    // Password Reset Routes...
+    Route::get('password/reset', ['Auth\ForgotPasswordController@showLinkRequestForm'])->name('password.request');
+    Route::post('password/email', ['Auth\ForgotPasswordController@sendResetLinkEmail'])->name('password.email');
+    Route::get('password/reset/{token}', ['Auth\ResetPasswordController@showResetForm'])->name('password.reset');
+    Route::post('password/reset', ['Auth\ResetPasswordController@reset']);
 
-Route::get('email/verify', 'Auth\VerificationController@show')->name('verification.notice');
-Route::get('email/verify/{id}', 'Auth\VerificationController@verify')->name('verification.verify');
-Route::get('email/resend', 'Auth\VerificationController@resend')->name('verification.resend');
-*/
+    Route::get('email/verify', [VerificationController::class, 'show'])->name('verification.notice');
+    Route::get('email/verify/{id}', [VerificationController::class, 'verify'])->name('verification.verify');
+    Route::get('email/resend', [VerificationController::class, 'resend'])->name('verification.resend');
+});
+//*/
 /*
 +--------+----------+------------------------+------------------+------------------------------------------------------------------------+------------+
 | Domain | Method   | URI                    | Name             | Action                                                                 | Middleware |
