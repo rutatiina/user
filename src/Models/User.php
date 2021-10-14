@@ -73,7 +73,7 @@ class User extends Authenticatable
 
     public function services()
     {
-        return $this->hasMany('Rutatiina\Admin\Models\ServiceUser', 'user_id', 'id');
+        return $this->hasMany('Rutatiina\User\Models\UserService', 'user_id', 'id');
     }
 
     public function getTenantAttribute()
