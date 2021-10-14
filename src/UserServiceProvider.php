@@ -6,6 +6,7 @@ use Illuminate\Support\ServiceProvider;
 use \Spatie\Permission\Middlewares\RoleMiddleware;
 use \Spatie\Permission\Middlewares\PermissionMiddleware;
 use \Spatie\Permission\Middlewares\RoleOrPermissionMiddleware;
+use Rutatiina\User\Models\User;
 
 class UserServiceProvider extends ServiceProvider
 {
@@ -17,6 +18,8 @@ class UserServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->loadRoutesFrom(__DIR__.'/routes/routes.php');
+
+        $this->app['config']->set('auth.providers.users.model', User::class); //set the default user model to the one in this package
 
         //$this->loadViewsFrom(__DIR__.'/resources/views', 'expense');
         //$this->loadMigrationsFrom(__DIR__.'/Database/Migrations');
