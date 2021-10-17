@@ -13,8 +13,8 @@ use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Rutatiina\User\Models\UserDetails;
 use Spatie\Activitylog\Models\Activity;
-use Rutatiina\Classes\Countries as ClassesCountries;
-use Rutatiina\Classes\Currencies as ClassesCurrencies;
+use Rutatiina\Globals\Services\Countries as ClassesCountries;
+use Rutatiina\Globals\Services\Currencies as ClassesCurrencies;
 
 
 class ProfileController extends Controller

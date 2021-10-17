@@ -15,8 +15,8 @@ use Illuminate\Support\Facades\Validator;
 use Rutatiina\Admin\Models\ServiceUser;
 use Rutatiina\Contact\Models\Contact;
 use Rutatiina\Contact\Models\ContactPerson;
-use Rutatiina\Classes\Countries as ClassesCountries;
-use Rutatiina\Classes\Currencies as ClassesCurrencies;
+use Rutatiina\Globals\Services\Countries as ClassesCountries;
+use Rutatiina\Globals\Services\Currencies as ClassesCurrencies;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
