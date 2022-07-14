@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Request as FacadesRequest;
 use Illuminate\Support\Facades\Validator;
-use Rutatiina\Admin\Models\ServiceUser;
+use Rutatiina\Qbuks\Models\ServiceUser;
 use Rutatiina\Contact\Models\Contact;
 use Rutatiina\Contact\Models\ContactPerson;
 use Rutatiina\Globals\Services\Countries as ClassesCountries;
@@ -43,7 +43,7 @@ class UserController extends Controller
         //query to get users who have given service
         if ($request->pagination && ($request->pagination == false || $request->pagination == 'false'))
         {
-            $users = User::whereHas('services', function ($query) use ($tenant) {
+            $users = User::with('permissions')->whereHas('services', function ($query) use ($tenant) {
                 $query->where('tenant_id', $tenant->id);
                 $query->where('service_id', 1);
             })->limit(50)->get();
@@ -52,7 +52,7 @@ class UserController extends Controller
         }
         else
         {
-            $users = User::whereHas('services', function ($query) use ($tenant) {
+            $users = User::with('permissions')->whereHas('services', function ($query) use ($tenant) {
                 $query->where('tenant_id', $tenant->id);
                 $query->where('service_id', 1);
             })->paginate($per_page);

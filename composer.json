@@ -19,7 +19,10 @@
     "autoload": {
         "psr-4": {
             "Rutatiina\\User\\": "src/"
-        }
+        },
+        "files": [
+            "src/Helpers/Permissions.php"
+        ]
     },
     "extra": {
         "laravel": {
