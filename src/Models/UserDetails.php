@@ -37,4 +37,12 @@ class UserDetails extends Model
         static::addGlobalScope(new TenantIdScope);
     }
 
+    public function getOnLoginUrlAttribute()
+    {
+    	if ($this->on_login == 'show-dashboard') return '/'; //'/financial-accounts/dashboard';
+    	if ($this->on_login == 'show-pos') return '/pos';
+
+        return '/';
+    }
+
 }

@@ -63,19 +63,31 @@ class LoginController extends Controller
 			$query->where('service_id', 1);
 		})->first();
 
-		$service = $request->user()->services()->first();
+		$service = $user->services()->first();
 
-		if($service) {
-			session([
-				'tenant_id' => $service->tenant_id,
-			]);
-			return null;
-		} else {
-			session([
+        //if the user has no service assigned to them
+		if(!$service) 
+        {
+            session([
 				'tenant_id' => 0,
 			]);
 
 			return redirect(route('organisations.create'));
 		}
+        
+        session([
+            'tenant_id' => $service->tenant_id,
+        ]);
+
+        //var_dump($user->details); exit;
+
+        if ($user->details && $user->details->on_login_url)
+        {
+            return redirect($user->details->on_login_url);
+            //return redirect()->intended($user->details->on_login_url);
+        }
+
+        return null;
+    
 	}
 }

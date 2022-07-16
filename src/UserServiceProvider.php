@@ -22,7 +22,7 @@ class UserServiceProvider extends ServiceProvider
         $this->app['config']->set('auth.providers.users.model', User::class); //set the default user model to the one in this package
 
         //$this->loadViewsFrom(__DIR__.'/resources/views', 'expense');
-        //$this->loadMigrationsFrom(__DIR__.'/Database/Migrations');
+        $this->loadMigrationsFrom(__DIR__.'/Database/Migrations');
 
         //register the Spatie\Permission middlewares
         //https://spatie.be/docs/laravel-permission/v5/basic-usage/middleware

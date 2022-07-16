@@ -23,8 +23,43 @@ use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
+    private $onLoginOptions;
+
     public function __construct()
-    {}
+    {
+        $this->middleware('permission:users.view');
+        $this->middleware('permission:users.create', ['only' => ['create', 'store']]);
+        $this->middleware('permission:users.update', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:users.delete', ['only' => ['destroy']]);
+
+
+        $this->onLoginOptions = [
+            [
+                'value' => 'show-dashboard',
+                'text' => 'Show dashboard'
+            ],
+            [
+                'value' => 'show-pos',
+                'text' => 'Show Point of sales'
+            ],
+            [
+                'value' => 'show-items',
+                'text' => 'Show items'
+            ],
+            [
+                'value' => 'show-contacts',
+                'text' => 'Show contacts'
+            ],
+            [
+                'value' => 'show-invoices',
+                'text' => 'Show invoices'
+            ],
+            [
+                'value' => 'show-bills',
+                'text' => 'Show bills'
+            ]
+        ];
+    }
 
     public function index(Request $request)
     {
@@ -77,6 +112,7 @@ class UserController extends Controller
         $data = [
             'pageTitle' => 'Create User',
             'urlPost' => '/users', #required
+            'onLoginOptions' => $this->onLoginOptions,
             'attributes' => $attributes,
         ];
 
@@ -123,6 +159,7 @@ class UserController extends Controller
 
             $userDetails->user_id = $user->id;
             $userDetails->tenant_id = Auth::user()->tenant->id;
+            $userDetails->on_login = $request->input('details.on_login');
             $userDetails->salutation = $request->input('details.salutation');
             //$userDetails->first_name = $request->first_name;
             //$userDetails->middle_name = $request->middle_name;
@@ -224,6 +261,7 @@ class UserController extends Controller
         $data = [
             'pageTitle' => 'Edit / Update User',
             'urlPost' => '/users/'.$id, #required
+            'onLoginOptions' => $this->onLoginOptions,
             'attributes' => $attributes,
         ];
 
@@ -256,6 +294,7 @@ class UserController extends Controller
                 'tenant_id' => Auth::user()->tenant->id,
             ]);
 
+            $userDetails->on_login = $request->input('details.on_login');
             $userDetails->salutation = $request->input('details.salutation');;
             //$userDetails->first_name = $request->first_name;
             //$userDetails->middle_name = $request->middle_name;
