@@ -27,7 +27,7 @@ class UserController extends Controller
 
     public function __construct()
     {
-        $this->middleware('permission:users.view');
+        $this->middleware('permission:users.view')->except('self');
         $this->middleware('permission:users.create', ['only' => ['create', 'store']]);
         $this->middleware('permission:users.update', ['only' => ['edit', 'update']]);
         $this->middleware('permission:users.delete', ['only' => ['destroy']]);
@@ -232,16 +232,32 @@ class UserController extends Controller
             'description' => env('APP_DESCRIPTION')
         ];
 
-        if ($id == 'current')
-        {
-            $user = Auth::user();
-            $user->load('details', 'permissions', 'roles');
+    
+        $user = User::find($id);
+        $user->load('details', 'permissions', 'roles');
 
-            return [
-                'user' => $user,
-                'system' => $system
-            ];
-        }
+        return [
+            'user' => $user,
+            'system' => $system
+        ];
+        
+    }
+
+    public function self()
+    {
+        $system = [
+            'name' => env('APP_NAME'),
+            'description' => env('APP_DESCRIPTION')
+        ];
+
+        $user = Auth::user();
+        $user->load('details', 'permissions', 'roles');
+
+        return [
+            'user' => $user,
+            'system' => $system
+        ];
+    
     }
 
     public function edit($id)

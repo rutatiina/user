@@ -21,6 +21,7 @@ use Rutatiina\User\Http\Controllers\Auth\VerificationController;
 //});
 
 Route::group(['middleware' => ['web', 'auth']], function() {
+    Route::get('users/current', [UserController::class, 'self']);
     Route::resource('users', UserController::class);
 });
 
