@@ -8,6 +8,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Spatie\Permission\Traits\HasRoles;
 use Rutatiina\Tenant\Models\Tenant;
+use Illuminate\Support\Facades\Schema;
 
 class User extends Authenticatable
 {
@@ -88,6 +89,11 @@ class User extends Authenticatable
     public function details()
     {
         return $this->hasOne('Rutatiina\User\Models\UserDetails', 'user_id', 'id');
+    }
+
+    public function getSearchableColumns()
+    {
+        return Schema::connection('tenant')->getColumnListing($this->table);
     }
 
 }

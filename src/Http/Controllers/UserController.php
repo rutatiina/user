@@ -13,12 +13,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Request as FacadesRequest;
 use Illuminate\Support\Facades\Validator;
 use Rutatiina\Qbuks\Models\ServiceUser;
-use Rutatiina\Contact\Models\Contact;
-use Rutatiina\Contact\Models\ContactPerson;
-use Rutatiina\Globals\Services\Countries as ClassesCountries;
-use Rutatiina\Globals\Services\Currencies as ClassesCurrencies;
-use Spatie\Permission\Models\Permission;
-use Spatie\Permission\Models\Role;
+use Illuminate\Support\Str;
 
 
 class UserController extends Controller
