@@ -33,7 +33,7 @@ class RoleController extends Controller
         }
 
         return [
-            'tableData' => Role::paginate($perPage)
+            'tableData' => Role::withCount(['users','permissions'])->paginate($perPage)
         ];
 
     }
@@ -41,9 +41,19 @@ class RoleController extends Controller
     public function create(Request $request)
     {
         //load the vue version of the app
-        if (!FacadesRequest::wantsJson()) {
+        if (!FacadesRequest::wantsJson()) 
+        {
             return view('ui.limitless::layout_2-ltr-default.appVue');
         }
+
+        return [
+            'pageTitle' => 'Create Item',
+            'urlPost' => '/settings/roles', #required
+            'attributes' => [
+                'name' => '',
+                'permissions' => []
+            ],
+        ];
     }
 
     public function store(Request $request)
@@ -69,9 +79,51 @@ class RoleController extends Controller
     public function show($txnId) {
     }
 
-    public function edit($txnId) {}
+    public function edit($id) 
+    {
+        if (!FacadesRequest::wantsJson()) 
+        {
+            return view('ui.limitless::layout_2-ltr-default.appVue');
+        }
 
-    public function update(Request $request) {}
+        $permissions = [];
+
+        $roleModel = Role::find($id);
+        $role = $roleModel->toArray();
+
+        foreach($roleModel->permissions as $p)
+        {
+            $permissions[] = $p->name;
+        }
+
+        $role['permissions'] = $permissions;
+        $role['_method'] = 'PATCH';
+
+        return [
+            'pageTitle' => 'Create Item',
+            'urlPost' => '/settings/roles/'.$id, #required
+            'attributes' => $role,
+        ];
+    }
+
+    public function update(Request $request) 
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => ['required', 'string'],
+            'permissions' => 'required|array',
+        ]);
+
+        if ($validator->fails()) {
+            return ['status' => false, 'messages' => $validator->errors()->all()];
+        }
+
+        $roleModel = Role::find($request->id);
+        $roleModel->name = $request->name;
+        $roleModel->save();
+       
+        $roleModel->syncPermissions($request->permissions);
+
+        return ['status' => true, 'messages' => ['Role updated']];}
 
     public function destroy() {}
 
