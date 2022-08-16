@@ -47,7 +47,7 @@ class RoleController extends Controller
         }
 
         return [
-            'pageTitle' => 'Create Item',
+            'pageTitle' => 'Create Role',
             'urlPost' => '/settings/roles', #required
             'attributes' => [
                 'name' => '',
@@ -100,7 +100,7 @@ class RoleController extends Controller
         $role['_method'] = 'PATCH';
 
         return [
-            'pageTitle' => 'Create Item',
+            'pageTitle' => 'Update role',
             'urlPost' => '/settings/roles/'.$id, #required
             'attributes' => $role,
         ];

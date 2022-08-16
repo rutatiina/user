@@ -67,7 +67,7 @@ class User extends Authenticatable
         }
 
         //add the relationships
-        $attributes['details'] = json_decode('{}');
+        $attributes['details'] = json_decode('{"salutation":""}');
 
         return $attributes;
     }

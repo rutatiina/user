@@ -2,18 +2,19 @@
 
 namespace Rutatiina\User\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use Rutatiina\User\Models\UserDetails;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Auth;
+use Rutatiina\User\Models\Role;
 use Rutatiina\User\Models\User;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\App;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Request as FacadesRequest;
-use Illuminate\Support\Facades\Validator;
+use Rutatiina\User\Models\UserDetails;
 use Rutatiina\Qbuks\Models\ServiceUser;
-use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Request as FacadesRequest;
 
 
 class UserController extends Controller
@@ -103,12 +104,16 @@ class UserController extends Controller
         $attributes = $contact->rgGetAttributes();
 
         $attributes['_method'] = 'POST';
+        $attributes['details']->on_login = 'show-dashboard';
+        $attributes['roles'] = [];
+        $attributes['selected_roles'] = [];
 
         $data = [
             'pageTitle' => 'Create User',
             'urlPost' => '/users', #required
             'onLoginOptions' => $this->onLoginOptions,
             'attributes' => $attributes,
+            'roles' => Role::get()
         ];
 
         if (FacadesRequest::wantsJson()) {
@@ -183,6 +188,9 @@ class UserController extends Controller
             $userDetails->shipping_address_fax = $request->input('details.shipping_address_fax');
 
             $userDetails->save();
+
+            //assign the roles to the user
+            $user->syncRoles($request->roles);
 
             DB::connection('system')->commit();
 
@@ -262,18 +270,23 @@ class UserController extends Controller
             return view('ui.limitless::layout_2-ltr-default.appVue');
         }
 
-        $user = User::with('details')->find($id);
+        $user = User::with(['details'])->find($id);
         $attributes = $user->toArray();
+
+        $userRoles = $user->roles;
 
         $attributes['details'] = ($attributes['details'])? $attributes['details'] : (object) [];
 
         $attributes['_method'] = 'PATCH';
+        $attributes['selected_roles'] = $userRoles;
+        $attributes['roles'] = $userRoles->pluck('id');
 
         $data = [
             'pageTitle' => 'Edit / Update User',
             'urlPost' => '/users/'.$id, #required
             'onLoginOptions' => $this->onLoginOptions,
             'attributes' => $attributes,
+            'roles' => Role::get()
         ];
 
         if (FacadesRequest::wantsJson()) {
@@ -283,6 +296,8 @@ class UserController extends Controller
 
     public function update($id, Request $request)
     {
+        //return $request;
+
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255'],
         ]);
@@ -291,13 +306,42 @@ class UserController extends Controller
             return ['status' => false, 'messages' => $validator->errors()->all()];
         }
 
+        //find the user
+        $user = User::find($id);
+
+        //check if the email has been changed abd validate it
+        if ($user->email != $request->email)
+        {
+            $validator = Validator::make($request->all(), [
+                'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            ]);
+    
+            if ($validator->fails()) {
+                return ['status' => false, 'messages' => $validator->errors()->all()];
+            }
+        }
+
+        //check if the password has been changed and validate it
+        if ($request->password)
+        {
+            $validator = Validator::make($request->all(), [
+                'password' => ['required', 'string', 'min:6', 'confirmed'],
+            ]);
+    
+            if ($validator->fails()) {
+                return ['status' => false, 'messages' => $validator->errors()->all()];
+            }
+        }
+
         DB::connection('system')->beginTransaction();
 
         try {
-
-            //create the user
-            $user = User::find($id);
+            
             $user->name = $request->name;
+
+            if ($user->email != $request->email) $user->email = $request->email; //save the new email
+            if ($request->password) $user->password = Hash::make($request->password); //save the new passwords
+
             $user->save();
 
             $userDetails = UserDetails::where('user_id', $id)->firstOrCreate([
@@ -334,6 +378,9 @@ class UserController extends Controller
             $userDetails->shipping_address_fax = $request->input('details.shipping_address_fax');
 
             $userDetails->save();
+
+            //assign the roles to the user
+            $user->syncRoles($request->roles);
 
             DB::connection('system')->commit();
 
