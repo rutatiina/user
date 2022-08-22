@@ -9,8 +9,8 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Rutatiina\User\Models\User;
-use Spatie\Permission\Models\Permission;
-use Spatie\Permission\Models\Role;
+use Rutatiina\User\Models\Permission;
+use Rutatiina\User\Models\Role;;
 
 
 class RoleController extends Controller
