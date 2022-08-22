@@ -17,7 +17,13 @@ class RoleController extends Controller
 {
 
     public function __construct()
-    {}
+    {
+        $this->middleware('permission:roles.view');
+        $this->middleware('permission:roles.create', ['only' => ['create', 'store']]);
+        $this->middleware('permission:roles.update', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:roles.delete', ['only' => ['destroy', 'deleteTxns']]);
+        $this->middleware('permission:roles.assign', ['only' => ['assign']]);
+    }
 
     public function index(Request $request)
     {
@@ -76,7 +82,9 @@ class RoleController extends Controller
         return ['status' => true, 'messages' => ['Role created']];
     }
 
-    public function show($txnId) {
+    public function show($id) 
+    {
+        //
     }
 
     public function edit($id) 
@@ -123,7 +131,8 @@ class RoleController extends Controller
        
         $roleModel->syncPermissions($request->permissions);
 
-        return ['status' => true, 'messages' => ['Role updated']];}
+        return ['status' => true, 'messages' => ['Role updated']];
+    }
 
     public function destroy() {}
 
