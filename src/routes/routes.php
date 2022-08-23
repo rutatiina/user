@@ -26,7 +26,6 @@ Route::group(['middleware' => ['web', 'auth']], function() {
 });
 
 Route::group(['middleware' => ['web', 'auth', 'tenant']], function() {
-    //Route::get('permissions/setup', 'PermissionController@setup');
     Route::get('profile/activity', [ProfileController::class, 'activity'])->name('profile.activity');
     Route::get('profile/roles', [ProfileController::class, 'roles'])->name('profile.roles');
     Route::get('profile/permissions', [ProfileController::class, 'permissions'])->name('profile.permissions');

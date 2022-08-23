@@ -3,10 +3,15 @@
     if (!function_exists('rg_permissions_array')) {
         function rg_permissions_array()
         {
-            $Permissions = \Spatie\Permission\Models\Permission::all();
+            $Permissions = \Rutatiina\User\Models\Permission::all();
             $permissionsArray = [];
 
-            foreach ($Permissions as $Permission) {
+            foreach ($Permissions as $Permission) 
+            {
+                //skip the tenants roles ie roles of id tenants 3100 - 3199
+
+                if ($Permission->id >= 3100 && $Permission->id <= 3199) continue;
+
                 $parts = explode('.', $Permission->name);
                 $last = array_pop($parts);
                 $parts = array(implode('.', $parts), $last);
