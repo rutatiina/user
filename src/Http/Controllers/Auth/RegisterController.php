@@ -72,6 +72,11 @@ class RegisterController extends Controller
                 'password' => Hash::make($data['password']),
             ]);
 
+            //give the user permissions to create a tenant
+            $user->givePermissionTo([
+                'tenants.*'
+            ]);
+
             return $user;
 
         });
