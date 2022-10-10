@@ -2,11 +2,14 @@
 
 namespace Rutatiina\User\Models;
 
-use Rutatiina\Tenant\Scopes\TenantIdScope;
 use Illuminate\Database\Eloquent\Model;
+use Rutatiina\Tenant\Scopes\TenantIdScope;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class UserDetails extends Model
 {
+    use SoftDeletes;
+    
     protected $connection = 'system';
 
 	/**

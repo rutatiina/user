@@ -3,15 +3,17 @@
 namespace Rutatiina\User\Models;
 
 use Laravel\Passport\HasApiTokens;
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Spatie\Permission\Traits\HasRoles;
 use Rutatiina\Tenant\Models\Tenant;
 use Illuminate\Support\Facades\Schema;
+use Spatie\Permission\Traits\HasRoles;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
+    // use SoftDeletes;
     use HasRoles, HasApiTokens, Notifiable;
 
     protected $guard_name = 'web'; //Spatie
