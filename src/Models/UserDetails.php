@@ -37,7 +37,9 @@ class UserDetails extends Model
     {
         parent::boot();
 
-        static::addGlobalScope(new TenantIdScope);
+        //NOTE:: this model does NOT need the tenant scope because the user details are for a user no matter what tenant they belong to.
+        //user details are only dependant on the user
+        // static::addGlobalScope(new TenantIdScope);
     }
 
     public function getOnLoginUrlAttribute()
